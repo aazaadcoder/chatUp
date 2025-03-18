@@ -1,4 +1,4 @@
-import  { useState } from 'react'
+import  {  useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuthUser } from '../store/useAuthStore';
 
@@ -14,7 +14,8 @@ const LogInPage = () => {
         password : ""
     });
 
-    const {login , isLoggingIn}  = useAuthUser();
+    const {login , isLoggingIn }  = useAuthUser();
+
 
     const validateForm = () => {
         if(!formData.email.trim()) return toast.error("Email is Required");

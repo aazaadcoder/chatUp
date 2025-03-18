@@ -11,8 +11,7 @@ export const useAuthUser = create((set) => ({
 
   checkAuth: async () => {
     try {
-      const response = axiosInstance.get("/auth/check");
-
+      const response = await axiosInstance.get("/auth/check");
       set({ authUser: response.data });
 
     } catch (error) {
@@ -61,6 +60,22 @@ export const useAuthUser = create((set) => ({
         toast.error(error.response?.data?.message);
     } finally {
         set({isLoggingIn : false});
+    }
+  },
+
+  updateProfile : async (data) => {
+    set({isUpdatingProfile : true})
+    try {
+        const response = await axiosInstance.put("/auth/update-profile", data);
+
+        set({authUser :response.data });
+
+        toast.success("Successfully updated the Profile Picture");
+
+    } catch (error) {
+        toast.error(error.response?.data?.message);
+    } finally {
+        set({isUpdatingProfile : false});
     }
   }
 }));

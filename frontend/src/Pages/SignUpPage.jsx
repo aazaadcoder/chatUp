@@ -12,8 +12,7 @@ const SignUpPage = () => {
     password: "",
   });
 
-  const { signup, isSigningUp} = useAuthUser();
-
+  const { signup, isSigningUp, checkAuth} = useAuthUser();
 
 
   const validateForm = () => {

@@ -39,9 +39,11 @@ export const signup = async (req, res) => {
 
       res.status(201).json({
         _id: newUser._id,
-        fullName: newUser._id,
+        fullName: newUser.fullName,
         email: newUser.email,
         profilePic: newUser.profilePic,
+        createdAt : newUser.createdAt
+
       });
     } else {
       res.status(400).json({ message: "Invalid User Data" });
@@ -75,9 +77,10 @@ export const login = async (req, res) => {
 
     res.status(200).json({
       _id: user._id,
-      fullName: user._id,
+      fullName: user.fullName,
       email: user.email,
       profilePic: user.profilePic,
+      createdAt : user.createdAt
     });
   } catch (error) {
     console.log("Error in login controller: ", error.message);
@@ -105,11 +108,11 @@ export const updateProfile = async(req, res) => {
             return res.status(400).json({message : "Profile Pic Required."});
         }
 
-        const uploadResponse = await cloudinary.uploader(profilePic);
+        const uploadResponse = await cloudinary.uploader.upload(profilePic);
 
         const updatedUser = await User.findByIdAndUpdate(userId, {profilePic : uploadResponse.secure_url}, {new : true});
 
-        res.status(200).json({message : "profile pic is required"})
+        res.status(200).json(updatedUser);
 
 
     } catch (error) {
