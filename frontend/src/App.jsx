@@ -7,17 +7,21 @@ import LogInPage from './Pages/LogInPage.jsx'
 import SettingsPage from './Pages/SettingsPage.jsx'
 import ProfilePage from './Pages/ProfilePage.jsx'
 import { useAuthUser } from './store/useAuthStore.js'
-
+import {Toaster}  from "react-hot-toast";
 import { Loader } from 'lucide-react';
 const App = () => {
-  const {authUser, checkAuth, ischeckingAuth} = useAuthUser();
 
+
+  const {authUser, checkAuth, ischeckingAuth} = useAuthUser();
 
   useEffect(() => {
     checkAuth();
-  }, [checkAuth]);
 
-  console.log({authUser});
+  }, []);
+
+  console.log("authuser", authUser);
+
+
 
   if(ischeckingAuth && !authUser){
     return(
@@ -34,11 +38,13 @@ const App = () => {
       
       <Routes>
         <Route path='/' element = {authUser ? <HomePage/> : <Navigate to="/login"/>}></Route>
-        <Route path='/signup' element = {authUser ? <Navigate to="/"/> : <SignUpPage/>}></Route>
-        <Route path='/login' element = {<LogInPage/>}></Route>
+        <Route path='/signup' element = {!authUser ? <SignUpPage/> : <Navigate to="/"/> }></Route>
+        <Route path='/login' element = {!authUser ? <LogInPage/> :  <Navigate to="/"/>  }></Route>
         <Route path='/settings' element = {<SettingsPage/>}></Route>
         <Route path='/profile' element = {authUser ? <ProfilePage/> : <Navigate to="/login"/>}></Route>
       </Routes>
+
+      <Toaster/>
     </div>
   )
 }

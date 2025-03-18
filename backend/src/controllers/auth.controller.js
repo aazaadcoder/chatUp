@@ -9,18 +9,18 @@ export const signup = async (req, res) => {
   console.log(req.body);
   try {
     if (!fullName || !email || !password) {
-      return res.status(400).json({ messsage: "all fields are required." });
+      return res.status(400).json({ message: "all fields are required." });
     }
 
     if (password.length < 6) {
       return res
         .status(400)
-        .json({ messsage: "password must be at least 6 characters" });
+        .json({ message: "password must be at least 6 characters" });
     }
 
     const user = await User.findOne({ email });
 
-    if (user) return res.status(400).json({ messsage: "Email Already Exists" });
+    if (user) return res.status(400).json({ message: "Email Already Exists" });
 
     const salt = await bycrpt.genSalt(10);
     const hashedPassword = await bycrpt.hash(password, salt);

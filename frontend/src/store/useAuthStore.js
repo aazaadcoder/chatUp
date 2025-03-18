@@ -1,29 +1,66 @@
-import {create} from "zustand";
+import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
+import toast from "react-hot-toast";
 
 export const useAuthUser = create((set) => ({
-    authUser : null,
-    isSigningUp : false,
-    isLogging : false,
-    isUpdatingProfile : false,
-    ischeckingAuth : true,
+  authUser: null,
+  isSigningUp: false,
+  isLoggingIn: false,
+  isUpdatingProfile: false,
+  ischeckingAuth: true,
 
+  checkAuth: async () => {
+    try {
+      const response = axiosInstance.get("/auth/check");
 
-    checkAuth: async ()=>{
-        try {
-            const response = axiosInstance.get("/auth/check");
+      set({ authUser: response.data });
 
-            set({authUser : response.data});
-        } catch (error) {
-            console.log("Error in checkAuth: ", error.message);
-            set({authUser : null});
-        }
-        finally {
-            set({ischeckingAuth : false});
-        }
-    },
-
-    signup: async (data)=> {
-
+    } catch (error) {
+      console.log("Error in checkAuth: ", error.message);
+      set({ authUser: null });
+    } finally {
+      set({ ischeckingAuth: false });
     }
-}))
+  },
+
+  signup: async (fromData) => {
+    set({ isSigningUp: true });
+    try {
+      const response = await axiosInstance.post("/auth/signup", fromData);
+      set({ authUser: response.data });
+      
+
+      toast.success("Account Created Successfully");
+    } catch (error) {
+        console.log(error);
+      toast.error(error.response?.data?.message);
+    } finally {
+      set({ isSigningUp: false });
+    }
+  },
+
+  logout : async () => {
+    try {
+        await axiosInstance.post("/auth/logout");
+        set({authUser : null});
+        toast.success("LoggedOut Successfully");
+    } catch (error) {
+        toast.error(error.response?.data?.message);        
+    }
+  },
+
+  login : async (formData) => {
+    set({isLoggingIn : true})
+    try {
+        const response = await axiosInstance.post("/auth/login", formData);
+        set({authUser : response.data});
+
+        toast.success("Successfully Logged In");
+
+    } catch (error) {
+        toast.error(error.response?.data?.message);
+    } finally {
+        set({isLoggingIn : false});
+    }
+  }
+}));
