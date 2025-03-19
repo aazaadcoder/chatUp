@@ -32,7 +32,7 @@ export const useAuthUser = create((set) => ({
       toast.success("Account Created Successfully");
     } catch (error) {
         console.log(error);
-      toast.error(error.response?.data?.message);
+      toast.error(error.response?.data?.message || "Internal Server Errror");
     } finally {
       set({ isSigningUp: false });
     }
@@ -44,7 +44,7 @@ export const useAuthUser = create((set) => ({
         set({authUser : null});
         toast.success("LoggedOut Successfully");
     } catch (error) {
-        toast.error(error.response?.data?.message);        
+        toast.error(error.response?.data?.message || "Internal Server Errror");        
     }
   },
 
@@ -57,7 +57,7 @@ export const useAuthUser = create((set) => ({
         toast.success("Successfully Logged In");
 
     } catch (error) {
-        toast.error(error.response?.data?.message);
+        toast.error(error.response?.data?.message || "Internal Server Errror");
     } finally {
         set({isLoggingIn : false});
     }
@@ -73,7 +73,7 @@ export const useAuthUser = create((set) => ({
         toast.success("Successfully updated the Profile Picture");
 
     } catch (error) {
-        toast.error(error.response?.data?.message);
+        toast.error(error.response?.data?.message || "Internal Server Errror");
     } finally {
         set({isUpdatingProfile : false});
     }

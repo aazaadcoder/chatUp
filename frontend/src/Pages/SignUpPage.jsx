@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import { useAuthUser } from "../store/useAuthStore";
 import { MessageSquare, User , Mail, Loader2, Lock, EyeOff, Eye } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -12,7 +12,7 @@ const SignUpPage = () => {
     password: "",
   });
 
-  const { signup, isSigningUp, checkAuth} = useAuthUser();
+  const { signup, isSigningUp } = useAuthUser();
 
 
   const validateForm = () => {
