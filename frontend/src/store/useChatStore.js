@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import { axiosInstance } from "../lib/axios";
 
 
-export const useChatStore = create ((set) =>({
+export const useChatStore = create ((set, get) =>({
     messages : [],
     users : [],
     selectedUser : null,
@@ -25,13 +25,14 @@ export const useChatStore = create ((set) =>({
     },
 
     getMessages : async (id)=> {
+        const {messages} = get();
         set({isMessagesLoading : true});
 
         try {
-            const response = await axiosInstance.get(`/messages/:${id}`);
+            const response = await axiosInstance.get(`/messages/${id}`);
 
-            set({users : response.data})
-            
+            set({messages : response.data})
+            console.log(messages);
         } catch (error) {
             toast.error(error.response.data.message || "Server Error in Loading Messages")
         } finally {
@@ -39,10 +40,22 @@ export const useChatStore = create ((set) =>({
         }
     },
 
+    
+    sendMessage : async (messageData) =>  {
+        const {messages, selectedUser} = get();
+        try {
+        const response = await axiosInstance.post(`/messages/send/${selectedUser._id}`, messageData);
 
-    // todo : optimize this later 
-    setSelectedUser : (selectedUser) =>  set({selectedUser })
+        set({messages : [...messages, response.data]})
+            
+        } catch (error) {
+            // toast.error(error.response.data.message || "Internal Server Error in Sending the Message")
+            throw Error();
+        }        
+    },
     
 
+    // todo : optimize this later 
+    setSelectedUser : (selectedUser) =>  set({selectedUser }),
 
 }));
