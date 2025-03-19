@@ -6,12 +6,12 @@ import SignUpPage from "./Pages/SignUpPage.jsx";
 import LogInPage from "./Pages/LogInPage.jsx";
 import SettingsPage from "./Pages/SettingsPage.jsx";
 import ProfilePage from "./Pages/ProfilePage.jsx";
-import { useAuthUser } from "./store/useAuthStore.js";
+import { useAuthStore } from "./store/useAuthStore.js";
 import { Toaster } from "react-hot-toast";
 import { Loader } from "lucide-react";
 import { useThemeStore } from "./store/useThemeStore.js";
 const App = () => {
-  const { authUser, checkAuth, ischeckingAuth } = useAuthUser();
+  const { authUser, checkAuth, ischeckingAuth } = useAuthStore();
 
   const { theme } = useThemeStore();
 

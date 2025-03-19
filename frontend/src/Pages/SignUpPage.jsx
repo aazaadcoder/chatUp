@@ -1,5 +1,5 @@
 import React, {  useState } from "react";
-import { useAuthUser } from "../store/useAuthStore";
+import {  useAuthStore } from "../store/useAuthStore";
 import { MessageSquare, User , Mail, Loader2, Lock, EyeOff, Eye } from "lucide-react";
 import { Link } from "react-router-dom";
 import AuthImagePattern from "../Components/AuthImagePattern";
@@ -12,7 +12,7 @@ const SignUpPage = () => {
     password: "",
   });
 
-  const { signup, isSigningUp } = useAuthUser();
+  const { signup, isSigningUp } = useAuthStore();
 
 
   const validateForm = () => {
