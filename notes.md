@@ -6,6 +6,7 @@
 6. when we close our browser the socket conecction is disconnected 
 7. io.emit("getOnlineUsers", Object.keys(userSocketMap))
 
+8. 
 
 
 bugs: 
