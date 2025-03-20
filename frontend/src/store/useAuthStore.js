@@ -1,14 +1,18 @@
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
+import {io} from "socket.io-client"
 
-export const useAuthStore = create((set) => ({
+const BASE_URL = "http://localhost:5001";
+
+export const useAuthStore = create((set, get) => ({
   authUser: null,
   isSigningUp: false,
   isLoggingIn: false,
   isUpdatingProfile: false,
   ischeckingAuth: true,
   onlineUsers : [],
+  socket : null,
 
   checkAuth: async () => {
     try {
@@ -31,6 +35,9 @@ export const useAuthStore = create((set) => ({
       
 
       toast.success("Account Created Successfully");
+
+      get().connectSocket();
+
     } catch (error) {
         console.log(error);
       toast.error(error.response?.data?.message || "Internal Server Errror");
@@ -44,6 +51,8 @@ export const useAuthStore = create((set) => ({
         await axiosInstance.post("/auth/logout");
         set({authUser : null});
         toast.success("LoggedOut Successfully");
+
+        get().disconnectSocket();
     } catch (error) {
         toast.error(error.response?.data?.message || "Internal Server Errror");        
     }
@@ -56,6 +65,8 @@ export const useAuthStore = create((set) => ({
         set({authUser : response.data});
 
         toast.success("Successfully Logged In");
+
+        get().connectSocket();
 
     } catch (error) {
         toast.error(error.response?.data?.message || "Internal Server Errror");
@@ -78,5 +89,30 @@ export const useAuthStore = create((set) => ({
     } finally {
         set({isUpdatingProfile : false});
     }
+  },
+
+  connectSocket : () => {
+    if(!get().authUser || get().socket?.connected) return ; 
+  
+    const socket = io(BASE_URL, {
+      query : {
+        userId: get().authUser._id
+      }
+    });
+    socket.connect();
+    set({socket});
+
+    socket.on("getOnlineUsers", (onlineUserIds)=> {
+      set({onlineUsers : onlineUserIds});
+    })
+
+    
+  },
+
+  disconnectSocket : () => {
+    if(get().socket?.connected) get().socket.disconnect(); 
+
+
   }
+
 }));

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useChatStore } from "../store/useChatStore";
 import ChatHeader from "./ChatHeader";
 import MessageInput from "./MessageInput";
@@ -7,13 +7,34 @@ import { useAuthStore } from "../store/useAuthStore";
 import { formatMessageTime } from "../lib/utils";
 
 const ChatContainer = () => {
-  const { messages, getMessages, isMessagesLoading, selectedUser } =
-    useChatStore();
+  const {
+    messages,
+    getMessages,
+    isMessagesLoading,
+    selectedUser,
+    subscribeToNewMessages,
+    unSubscribeFromNewMessages,
+  } = useChatStore();
   const { authUser } = useAuthStore();
+  const messageEndRef = useRef();
 
   useEffect(() => {
+    if(messageEndRef.current && messages){
+      messageEndRef.current.scrollIntoView({behavior : "smooth"});
+    }
+  }, [messages])
+  useEffect(() => {
     getMessages(selectedUser._id);
-  }, [selectedUser, getMessages]);
+
+    subscribeToNewMessages();
+
+    return () => unSubscribeFromNewMessages();
+  }, [
+    selectedUser,
+    getMessages,
+    unSubscribeFromNewMessages,
+    subscribeToNewMessages,
+  ]);
 
   if (isMessagesLoading) {
     return (
@@ -52,18 +73,22 @@ const ChatContainer = () => {
               </div>
             </div>
             <div className="chat-header mb-1">
-              <time className="text-xs opacity-50">{formatMessageTime(message.createdAt)}</time>
+              <time className="text-xs opacity-50">
+                {formatMessageTime(message.createdAt)}
+              </time>
             </div>
             <div className="chat-bubble flex flex-col">
               {message.image && (
-                <img 
-                src = {message.image}
-                alt="attachment" 
-                className="sm:max-w-[200px] rounded-md mb-2"
+                <img
+                  src={message.image}
+                  alt="attachment"
+                  className="sm:max-w-[200px] rounded-md mb-2"
                 />
               )}
-              
-              {message.text && <p>{message.text}</p>}</div>
+
+              {message.text && <p >{message.text}</p>}
+              <div ref={messageEndRef} ></div>
+            </div>
           </div>
         ))}
       </div>

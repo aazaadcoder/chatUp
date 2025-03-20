@@ -12,7 +12,7 @@ const SideBar = () => {
   useEffect(() => {
     getUsers();
   }, [getUsers]);
-
+  const [showOnlineUsersOnly, setShowOnlineUsersOnly] = useState(false);
   if (isUsersLoading) return <SidebarSkeleton />;
 
   return (
@@ -43,7 +43,7 @@ const SideBar = () => {
                 alt={user?.fullName}
                 className="size-12 object-cover rounded-full"
               />
-              {onlineUsers.includes(user) && (
+              {onlineUsers.includes(user._id) && (
                 <span className="absolute bottom-0 right-0 size-3 bg-green-300 rounded-full ring-2 ring-zinc-900" />
               )}
             </div>

@@ -6,7 +6,9 @@ import cookieParser from "cookie-parser";
 import { connectDB } from "../lib/db.js";
 import messageRouter from "./routes/message.route.js";
 import cors from "cors";
-const app = express();
+import { app, io, server } from "../lib/socket.js";
+
+
 dotenv.config();
 
 const PORT = process.env.PORT;
@@ -25,7 +27,10 @@ app.use(cors(
 app.use("/api/auth", authRouter);
 app.use("/api/messages", messageRouter);
 
-app.listen(PORT, () => {
+app.get("/", (req,  res)=> {
+  return res.json({message : "hello from server"})
+})
+server.listen(PORT, () => {
   console.log("listening on port:" + PORT);
   connectDB();
 });

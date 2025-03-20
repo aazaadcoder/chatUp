@@ -1,8 +1,10 @@
-import { response } from "express";
 import Message from "../models/message.model.js";
 import User from "../models/user.model.js";
 import { v2 as cloudinary } from "cloudinary";
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
+
+import { getSocketId, io } from "../../lib/socket.js";
+
 export const getUsersForSidebar = async (req, res) => {
   try {
     const loggedInUserId = req.user._id;
@@ -62,7 +64,14 @@ export const sendMessage = async (req, res) => {
 
     await newMessage.save();
 
-    // todo : realtime functionality to be added  => socket.io
+    // realtime functionality to be added  => socket.io
+
+    const reciverSocketId = getSocketId(receiverId);
+
+    if(reciverSocketId) {
+      io.to(reciverSocketId).emit("newMessage", newMessage);
+    }
+
 
     return res.status(200).json(newMessage);
   } catch (error) {
