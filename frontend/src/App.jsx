@@ -11,11 +11,13 @@ import { Toaster } from "react-hot-toast";
 import { Loader } from "lucide-react";
 import { useThemeStore } from "./store/useThemeStore.js";
 const App = () => {
-  const { authUser, checkAuth, ischeckingAuth, onlineUsers } = useAuthStore();
+  const { authUser, checkAuth, ischeckingAuth, onlineUsers, connectSocket } = useAuthStore();
   const { theme } = useThemeStore();
 
   useEffect(() => {
     checkAuth();
+
+    
   }, [checkAuth]);
 
   if (ischeckingAuth && !authUser) {

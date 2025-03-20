@@ -15,6 +15,7 @@ const ChatContainer = () => {
     subscribeToNewMessages,
     unSubscribeFromNewMessages,
   } = useChatStore();
+  
   const { authUser } = useAuthStore();
   const messageEndRef = useRef();
 
@@ -23,6 +24,7 @@ const ChatContainer = () => {
       messageEndRef.current.scrollIntoView({behavior : "smooth"});
     }
   }, [messages])
+
   useEffect(() => {
     getMessages(selectedUser._id);
 

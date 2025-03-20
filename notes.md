@@ -12,3 +12,5 @@ bugs:
 1. when i close the tab after logging out when i try to retrive the tab the home page opens though token is not present
 
 2. unable to execute the seed script 
+
+3. when we refresh the page the online users things breaks most probalby beacuse the socket in useauthstore data    is lost 
