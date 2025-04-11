@@ -1,5 +1,4 @@
-# 💬 ChatUp : Realtime Chatting Application 
-
+# 💬 ChatUp : Realtime Chatting Application [(Live Link)](https://chat-app-fullstack-tan.vercel.app/)
 A real-time chat application built using the MERN stack (MongoDB, Express.js, React, Node.js) with socket.io for seamless communication. This app allows users to register, log in, create private or group chats, and communicate in real-time.
 
 <!-- [![Watch the Demo](https://img.youtube.com/vi/ntKkVrQqBYY/0.jpg)](https://www.youtube.com/watch?v=ntKkVrQqBYY) -->
