@@ -8,7 +8,7 @@ import messageRouter from "./routes/message.route.js";
 import cors from "cors";
 import { app, io, server } from "../lib/socket.js";
 import path from "path";
-
+  
 dotenv.config();
 
 const PORT = process.env.PORT;
@@ -44,3 +44,4 @@ server.listen(PORT, () => {
   console.log("listening on port:" + PORT);
   connectDB();
 });
+
